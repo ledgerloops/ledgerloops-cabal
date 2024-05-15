@@ -4,25 +4,32 @@ WORK IN PROGRESS
 
 The idea is to run ledgerloops over peer-to-peer messaging links powered by [Cabal](https://cabal.chat).
 
+FIXME: The `init` event is not arriving.
+When messages do arrive, it's very slow (20 seconds or so).
+I'll ask around at [P4P unconference](https://offline.place/events/2024/05/24/p4p-unconference/) to find out what I'm doing wrong here.
+
 Usage:
 ```
 git clone https://github.com/ledgerloops/ledgerloops-cabal
 cd ledgerloops-cabal
 npm install
 npm run build
-npm start
+npm start alice bob
 ```
 
 In a separate window:
 ```
-npx cabal --temp 411dbe21d6f8e222733ac88d2da3cf953aa9f5466db94fa9fa967a765be3875e
+npm start bob alice
+```
+Alice and Bob will try to connect to a Cabal between them, namely
+`14011c8dc710dc387a64d44e942bd0d60f35e5f4975917d6a3a014ee16222b91`
+which happens to be `sha256('alice-bob')`.
+
+So in yet another window you can do this to listen in:
+```
+npx cabal --temp 14011c8dc710dc387a64d44e942bd0d60f35e5f4975917d6a3a014ee16222b91
 > /join default
+> /nick yourmaker
 > hello there
 ```
 
-You will see the messaging working.
-
-Next step: set up a number of nodes, with links between them, for instance in an hourglass topology like [the one from Strategy Pit](https://github.com/ledgerloops/strategy-pit?tab=readme-ov-file#hour-glass), and then run [Saiga nodes](https://github.com/ledgerloops/strategy-pit?tab=readme-ov-file#-saiga)
-and see if they find loops and resolve them.
-
-For this, I'll need one proces per node.

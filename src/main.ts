@@ -1,17 +1,13 @@
-import Client from 'cabal-client';
+import { Server } from './server.js';
 
-const client = new Client({
-  config: {
-    dbdir: '/tmp/cabals'
-  }
-})
+if (process.argv.length < 3) {
+  throw new Error('Usage: npm start <name> <neighbour1> <neighbour2> ...');
+}
+const name = process.argv[2];
 
-client.addCabal('cabal://411dbe21d6f8e222733ac88d2da3cf953aa9f5466db94fa9fa967a765be3875e').then((cabal) => {
-  console.log(cabal.key);
-  cabal.on('new-message', (event) => {
-    console.log(event.channel, event.author.key, event.message.value.content.text);
-  });
-  cabal.processLine('/join default');
-  cabal.processLine('hello cabal');
-  // resolves when the cabal is ready, returns a CabalDetails instance
-});
+const server = new Server(name);
+server.testReceive();
+// for (let i = 3; i < process.argv.length; i++) {
+//   console.log(`Adding neighbour ${process.argv[i]}`);
+//   await server.addNeighbour(process.argv[i]);
+// }
